@@ -1,0 +1,128 @@
+The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
+
+Given an integer n, return all distinct solutions to the n-queens puzzle. You may return the answer in any order.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space, respectively.
+
+Rule : every col and row should have a Queen also no one should attack each other.
+
+Approach:
+1.Start filling NxN from (0,0) .
+2.find all the possibility generated using and backtrack the way.
+3.Drawing tree is very important.
+
+Code(Brute Force like):
+class Solution {
+    private:
+    bool isSafe(int row,int col,vector<string> &temp,int n)
+    {
+        int dupcol = col;
+        int duprow = row;
+
+//To check straight diagonal.
+        while(row >= 0 && col >= 0)
+        {
+            if(temp[row][col] == 'Q') return false;
+            row--;
+            col--;
+        }
+
+        col = dupcol;
+        row = duprow;
+//to check upper diagonal.
+        while(col >= 0)
+        {
+            if(temp[row][col] == 'Q') return false;
+            col--;
+        }
+
+        col = dupcol;
+        row = duprow;
+//to check lower diagonal.
+        while(row < n && col >= 0)
+        {
+            if(temp[row][col] == 'Q') return false;
+            col--;
+            row++;
+        }
+//else return true.
+        return true;
+    }
+    void solve(int col,vector<string> &temp,vector<vector<string>> &ans,int n)
+    {
+        if(col == n)
+        {
+            ans.push_back(temp);
+            return;
+        }
+        for(int row =  0;row < n;row++)
+        {
+            if(isSafe(row,col,temp,n))
+            {
+                temp[row][col] = 'Q';
+                solve(col + 1,temp,ans,n);
+                temp[row][col] = '.';
+            }
+        }
+    }
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<string> temp(n);
+        vector<vector<string>> ans;
+        string s(n,'.');
+        for(int i = 0;i < n;i++)
+        {
+            temp[i] = s;
+        }
+        solve(0,temp,ans,n);
+        return ans;
+    }
+};
+
+Code(Best):
+
+class Solution {
+public:
+void solve(int col,vector<string> &board,vector<vector<string>> &ans,vector<int> 
+&left,vector<int> &upperdiagonal,vector<int> &lowerdiagonal,int n)
+{
+    if(col == n)
+    {
+        ans.push_back(board);
+        return;
+    }
+    for(int row = 0;row < n;row++)
+    {
+        if(left[row] == 0 && lowerdiagonal[row + col] == 0 && upperdiagonal[n - 1 + col - row] == 0)
+        {
+            board[row][col] = 'Q';
+            left[row] = 1;
+            lowerdiagonal[row + col] = 1;
+            upperdiagonal[n - 1 + col - row] = 1;
+
+            solve(col + 1,board,ans,left,upperdiagonal,lowerdiagonal,n);
+
+            board[row][col] = '.';
+            left[row] = 0;
+            lowerdiagonal[row + col] = 0;
+            upperdiagonal[n - 1 + col - row] = 0;
+        }
+    }
+}
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> ans;
+        vector<string> board(n);
+        string s(n,'.');
+
+        for(int i = 0;i < n;i++)
+        {
+            board[i] = s;
+        }
+
+        vector<int> left(n,0) , upperdiagonal(2*n - 1,0) , lowerdiagonal(2*n - 1,0);
+
+        solve(0,board,ans,left,upperdiagonal,lowerdiagonal,n);
+
+        return ans;
+    }
+};
