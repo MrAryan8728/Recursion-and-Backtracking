@@ -23,6 +23,7 @@ bool check(string s,int i)
     return check(s,i+1);
 }
 int main() {
+    
     // int n;
     // cin>>n;
     // int arr[n];

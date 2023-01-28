@@ -42,7 +42,9 @@ void print_1toN_B(int i,int j)
     if(i > j)
     return;
     print_1toN_B(i + 1,j);
-    cout<<i<<" ";   
+    cout<<i<<" "; 
+    //Explanation is using the tree. 
+    //print execute after the last condn as : f(1,3) -> f(2,3) ->f(3,3) -> f(4,3) -> return -> print(3) -> print(2) -> print(1);
 }
 
 int main() {
@@ -52,7 +54,10 @@ int main() {
 
     int n;
     cin>>n;
+
     // print_linear(n);
+
     // print_1toN(n,1);
-    print_1toN_B(1,n);
+
+    //print_1toN_B(1,n);
 }
